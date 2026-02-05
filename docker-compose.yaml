@@ -1,0 +1,15 @@
+services:
+  postgress:
+    image: postgres:latest
+    container_name: xaaji_gate
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: xaaji_gate_database
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+volumes:
+  postgres_data:
