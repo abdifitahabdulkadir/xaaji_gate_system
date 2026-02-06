@@ -86,7 +86,14 @@ export const getUserSessionFn = createServerFn().handler(async () => {
 export const globalAuthMiddleware = createMiddleware({
   type: 'request',
 }).server(async ({ next }) => {
-  const session = await getUserSessionFn()
+  const session = await auth.api.getSession({
+    headers: await getHeaders(),
+  })
+
+  if (!session) {
+    redirect({ to: '/login' })
+  }
+
   if (!session) {
     redirect({ to: '/login' })
   }

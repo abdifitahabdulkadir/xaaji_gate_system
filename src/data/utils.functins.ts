@@ -7,9 +7,7 @@ export async function getHeaders() {
   return await getRequestHeaders()
 }
 
-export const generateCustomIdFn = createServerFn({
-  method: 'POST',
-})
+export const generateCustomIdFn = createServerFn()
   .inputValidator(
     z.object({
       entity: z.enum(Entity),

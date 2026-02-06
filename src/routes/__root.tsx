@@ -12,6 +12,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import appCss from '../styles.css?url'
 
+import { Provider } from '@/integrations/tanstack-query/root-provider'
 import type { QueryClient } from '@tanstack/react-query'
 
 interface MyRouterContext {
@@ -48,15 +49,18 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const { queryClient } = Route.useRouteContext()
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
-        <Header />
-        {children}
-        <Toaster />
+        <Provider queryClient={queryClient}>
+          <Header />
+          {children}
+          <Toaster />
+        </Provider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',
