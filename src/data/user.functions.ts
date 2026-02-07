@@ -1,8 +1,14 @@
 import { auth } from '@/lib/auth'
-import { LoginSchema, RegisterSchema } from '@/lib/validations'
+import { formatDate } from '@/lib/utils'
+import {
+  EditBasicDataSchema,
+  LoginSchema,
+  RegisterSchema,
+} from '@/lib/validations'
 import { redirect } from '@tanstack/react-router'
 import { createMiddleware, createServerFn } from '@tanstack/react-start'
 import { prisma } from 'prisma/prisma'
+import z from 'zod'
 import { getHeaders } from './utils.functins'
 
 export const registerFn = createServerFn({ method: 'POST' })
@@ -83,7 +89,7 @@ export const getUserSessionFn = createServerFn().handler(async () => {
   }
 })
 
-export const globalAuthMiddlewareFn = createMiddleware({
+export const globalAuthMiddleware = createMiddleware({
   type: 'request',
 }).server(async ({ next }) => {
   const session = await auth.api.getSession({
@@ -91,10 +97,122 @@ export const globalAuthMiddlewareFn = createMiddleware({
   })
 
   if (!session) {
-    redirect({ to: '/login' })
+    return redirect({ to: '/login' })
   }
-
   return next({
-    context: session,
+    context: {
+      session: session.session,
+      user: session.user,
+    },
   })
 })
+
+export const getAllUsers = createServerFn().handler(async function (): Promise<
+  ActionResponse<UserTable[]>
+> {
+  try {
+    const users = await prisma.user.findMany({})
+
+    if (!users.length) return { success: true, data: [] }
+
+    const transformed: UserTable[] = users.map((eachUser) => {
+      return {
+        id: eachUser.id,
+        name: eachUser.name,
+        email: eachUser.email,
+        gender: eachUser.gender,
+        role: eachUser.role,
+        createdAt: formatDate(eachUser.createdAt),
+        banExpires: eachUser.banExpires,
+        banned: eachUser.banned ?? false,
+        banReason: eachUser.banReason ?? 'Not banned ',
+      }
+    })
+    return { success: true, data: transformed }
+  } catch (error) {
+    return {
+      success: false,
+      Errors: {
+        statusCode: 400,
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Failed to fetch Users. please try again',
+      },
+    }
+  }
+})
+
+export const getUserByIdFn = createServerFn()
+  .inputValidator(
+    z.object({
+      userId: z.string().min(1, 'User ID is required'),
+    }),
+  )
+  .handler(async function ({ data }): Promise<ActionResponse<UserTable>> {
+    try {
+      const foundUser = await prisma.user.findUnique({
+        where: {
+          id: data.userId,
+        },
+      })
+      if (!foundUser) return { success: true }
+      const transformed: UserTable = {
+        id: foundUser.id,
+        name: foundUser.name,
+        email: foundUser.email,
+        gender: foundUser.gender,
+        role: foundUser.role,
+        createdAt: formatDate(foundUser.createdAt),
+        banExpires: foundUser.banExpires,
+        banned: foundUser.banned ?? false,
+        banReason: foundUser.banReason ?? 'Not banned ',
+      }
+
+      return { success: true, data: transformed }
+    } catch (error) {
+      return {
+        success: true,
+        Errors: {
+          message:
+            error instanceof Error ? error.message : 'Failed to fetch user',
+          statusCode: 400,
+        },
+      }
+    }
+  })
+
+export const editUsersBasicDataFn = createServerFn()
+  .inputValidator(
+    EditBasicDataSchema.extend({
+      userId: z.string().min(1, 'User ID is required'),
+    }),
+  )
+  .handler(async function ({ data }): Promise<ActionResponse<UserTable>> {
+    try {
+      await prisma.user.update({
+        where: {
+          id: data.userId,
+        },
+        data: {
+          name: data.name,
+          gender: data.gender,
+          role: data.role,
+          email: data.email,
+        },
+      })
+
+      return { success: true }
+    } catch (error) {
+      return {
+        success: true,
+        Errors: {
+          message:
+            error instanceof Error
+              ? error.message
+              : 'Failed to save  the changes',
+          statusCode: 400,
+        },
+      }
+    }
+  })

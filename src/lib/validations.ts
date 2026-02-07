@@ -21,6 +21,11 @@ export const LoginSchema = RegisterSchema.pick({
   password: true,
 })
 
+export const EditBasicDataSchema = RegisterSchema.omit({
+  password: true,
+})
+
 // export types for easier use in the frontned
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>
 export type LoginSchemaType = z.infer<typeof LoginSchema>
+export type EditBasicDataSchemaType = z.infer<typeof EditBasicDataSchema>

@@ -17,6 +17,7 @@ import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as DashboardUsersIndexRouteImport } from './routes/dashboard/users/index'
 import { Route as DashboardBranchIdIndexRouteImport } from './routes/dashboard/$branchId/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as DashboardUsersUserIdEditRouteImport } from './routes/dashboard/users/$userId.edit'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -58,6 +59,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardUsersUserIdEditRoute =
+  DashboardUsersUserIdEditRouteImport.update({
+    id: '/users/$userId/edit',
+    path: '/users/$userId/edit',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/$branchId/': typeof DashboardBranchIdIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
+  '/dashboard/users/$userId/edit': typeof DashboardUsersUserIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,6 +85,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/$branchId': typeof DashboardBranchIdIndexRoute
   '/dashboard/users': typeof DashboardUsersIndexRoute
+  '/dashboard/users/$userId/edit': typeof DashboardUsersUserIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,6 +97,7 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/$branchId/': typeof DashboardBranchIdIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
+  '/dashboard/users/$userId/edit': typeof DashboardUsersUserIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard/$branchId/'
     | '/dashboard/users/'
+    | '/dashboard/users/$userId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard/$branchId'
     | '/dashboard/users'
+    | '/dashboard/users/$userId/edit'
   id:
     | '__root__'
     | '/'
@@ -119,6 +131,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard/$branchId/'
     | '/dashboard/users/'
+    | '/dashboard/users/$userId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/users/$userId/edit': {
+      id: '/dashboard/users/$userId/edit'
+      path: '/users/$userId/edit'
+      fullPath: '/dashboard/users/$userId/edit'
+      preLoaderRoute: typeof DashboardUsersUserIdEditRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
   }
 }
 
@@ -194,12 +214,14 @@ interface DashboardRouteRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardBranchIdIndexRoute: typeof DashboardBranchIdIndexRoute
   DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
+  DashboardUsersUserIdEditRoute: typeof DashboardUsersUserIdEditRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardBranchIdIndexRoute: DashboardBranchIdIndexRoute,
   DashboardUsersIndexRoute: DashboardUsersIndexRoute,
+  DashboardUsersUserIdEditRoute: DashboardUsersUserIdEditRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

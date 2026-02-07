@@ -18,9 +18,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
+import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import TableSearchInput from '../shared/TableSearchInput'
-import { Button } from '../ui/button'
+import { Button, buttonVariants } from '../ui/button'
 import { Input } from '../ui/input'
 
 interface DataTableProps<TData, TValue> {
@@ -95,13 +97,36 @@ export function UsersTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
+                className="py-3 h-15"
                 data-state={row.getIsSelected() && 'selected'}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {row.getVisibleCells().map((cell) => {
+                  const columId = cell.column.id
+                  const userId = cell.row.getValue('id')
+                  if (columId === 'actions') {
+                    return (
+                      <TableCell key={cell.id}>
+                        <Link
+                          params={{
+                            userId: String(userId),
+                          }}
+                          to="/dashboard/users/$userId/edit"
+                          className={cn(buttonVariants())}
+                        >
+                          Edit
+                        </Link>
+                      </TableCell>
+                    )
+                  }
+                  return (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  )
+                })}
               </TableRow>
             ))
           ) : (

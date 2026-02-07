@@ -1,11 +1,11 @@
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from '../ui/skeleton'
 
 export function TableSkelton({
   rows = 3,
   cols,
 }: {
-  rows?: number;
-  cols: number;
+  rows?: number
+  cols: number
 }) {
   return (
     <div className="w-full border rounded-2xl overflow-hidden">
@@ -28,5 +28,5 @@ export function TableSkelton({
         ))}
       </div>
     </div>
-  );
+  )
 }

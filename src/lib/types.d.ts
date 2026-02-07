@@ -32,3 +32,15 @@ type SessionUser = {
   banExpires: Date | null
   gender?: string | null
 }
+
+type UserTable = {
+  id: stirng
+  name: string
+  email: string
+  gender: string | null
+  role: string
+  createdAt: string
+  banned: boolean | null
+  banReason: string | null
+  banExpires: Date | null
+}

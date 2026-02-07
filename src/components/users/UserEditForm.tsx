@@ -19,18 +19,18 @@ import {
   SelectValue,
 } from '../ui/select'
 
-export default function RegisterForm() {
+export default function UserEditForm() {
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<RegisterSchemaType>({
     defaultValues: {
       name: '',
       email: '',
-      role: undefined,
       password: '',
+      role: undefined,
       gender: undefined,
     },
     resolver: standardSchemaResolver(RegisterSchema),
