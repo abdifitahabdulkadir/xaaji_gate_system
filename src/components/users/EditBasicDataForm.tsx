@@ -23,6 +23,7 @@ import {
 interface Props {
   user?: UserTable
 }
+
 export default function EditBasicDataForm({ user }: Props) {
   const {
     register,
@@ -71,7 +72,7 @@ export default function EditBasicDataForm({ user }: Props) {
   return (
     <div className="w-full mx-auto h-fit border rounded-2xl px-6 py-4  max-w-3xl space-y-6">
       <div className="flex items-center border-border/40  border-b justify-center">
-        <h2 className="text-2xl font-bold">Xaaji Gate System</h2>
+        <h2 className="text-2xl font-bold">Edit User's Basic Data</h2>
       </div>
       <form
         className="flex flex-col gap-4 text-[1.2rem]"

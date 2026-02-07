@@ -25,7 +25,31 @@ export const EditBasicDataSchema = RegisterSchema.omit({
   password: true,
 })
 
-// export types for easier use in the frontned
+export const BanUserSchema = z.object({
+  banned: z.boolean(),
+  banExpires: z.union([
+    z.undefined(),
+    z.date().refine((selectedDate) => {
+      const today = new Date()
+      const selected = new Date(selectedDate)
+      const isValid = selected.getTime() >= today.getTime()
+      if (!isValid) {
+        throw new Error('Ban expiration date must not be in the past')
+      }
+      return isValid
+    }),
+  ]),
+  bannedReason: z.union([
+    z.undefined(),
+    z
+      .string()
+      .min(1, 'Banning reason is required')
+      .max(40, 'Banning reason must be less than 40 characters'),
+  ]),
+})
+
+// export types for easier use in the fronend.
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>
 export type LoginSchemaType = z.infer<typeof LoginSchema>
 export type EditBasicDataSchemaType = z.infer<typeof EditBasicDataSchema>
+export type BanUserSchemaType = z.infer<typeof BanUserSchema>

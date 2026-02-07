@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth'
 import { formatDate } from '@/lib/utils'
 import {
+  BanUserSchema,
   EditBasicDataSchema,
   LoginSchema,
   RegisterSchema,
@@ -212,6 +213,55 @@ export const editUsersBasicDataFn = createServerFn()
               ? error.message
               : 'Failed to save  the changes',
           statusCode: 400,
+        },
+      }
+    }
+  })
+
+export const banUnBanUserFn = createServerFn({ method: 'POST' })
+  .inputValidator(
+    BanUserSchema.extend({
+      userId: z.string().min(1, 'User ID is required'),
+    }),
+  )
+  .handler(async function ({ data }): Promise<ActionResponse> {
+    try {
+      const foundUser = await prisma.user.findUnique({
+        where: {
+          id: data.userId,
+        },
+      })
+      if (!foundUser) throw new Error('User with given ID is not found')
+
+      if (foundUser.banned) {
+        await auth.api.unbanUser({
+          headers: await getHeaders(),
+          body: {
+            userId: data.userId,
+          },
+        })
+      } else {
+        await auth.api.banUser({
+          headers: await getHeaders(),
+          body: {
+            userId: data.userId,
+            banReason: data.bannedReason,
+            banExpiresIn: data.banExpires
+              ? Math.floor(data.banExpires.getTime() / 1000)
+              : undefined,
+          },
+        })
+      }
+      return { success: true }
+    } catch (error) {
+      return {
+        success: false,
+        Errors: {
+          statusCode: 400,
+          message:
+            error instanceof Error
+              ? error.message
+              : 'Failed to ban or unban user. please try again',
         },
       }
     }
