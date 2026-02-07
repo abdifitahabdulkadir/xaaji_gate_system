@@ -30,7 +30,27 @@ export const Entity = {
   product: 'product',
   invoice: 'invoice',
   transaction: 'transaction',
-  payment: 'payment'
+  payment: 'payment',
+  customer: 'customer'
 } as const
 
 export type Entity = (typeof Entity)[keyof typeof Entity]
+
+
+export const TransactionStatus = {
+  Paid: 'Paid',
+  unPaid: 'unPaid',
+  partiallyPaid: 'partiallyPaid'
+} as const
+
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
+
+
+export const PaymentMethodOptions = {
+  EVC_Plus: 'EVC_Plus',
+  Bank: 'Bank',
+  Waafi: 'Waafi',
+  Cash: 'Cash'
+} as const
+
+export type PaymentMethodOptions = (typeof PaymentMethodOptions)[keyof typeof PaymentMethodOptions]

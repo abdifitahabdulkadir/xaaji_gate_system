@@ -1,4 +1,3 @@
-
 enum UserRoles {
   user
   admin
@@ -10,12 +9,27 @@ enum Gender {
 }
 
 enum Entity {
-  user 
-  product 
-  invoice 
-  transaction 
+  user
+  product
+  invoice
+  transaction
   payment
+  customer
 }
+
+enum TransactionStatus {
+  Paid
+  unPaid
+  partiallyPaid
+}
+
+enum PaymentMethodOptions {
+  EVC_Plus
+  Bank
+  Waafi
+  Cash
+}
+
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -34,14 +48,18 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  role     UserRoles
-  gender   String?
-  sessions Session[]
-  accounts Account[]
+  role        UserRoles
+  gender      String?
+  sessions    Session[]
+  accounts    Account[]
+  transaction Transaction[]
 
   banned     Boolean?
   banReason  String?
   banExpires DateTime?
+
+  branchId String?
+  branch   Branch? @relation(fields: [branchId], references: [id], onDelete: Cascade)
 
   @@unique([email])
   @@map("user")
@@ -97,16 +115,130 @@ model Verification {
   @@map("verification")
 }
 
-
-
-model CustomIdCounter{
-  id String @id @default(uuid())
+model CustomIdCounter {
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
 
-  entity Entity
-  year Int 
-  month Int 
-  sequence Int @default(0)
+  entity   Entity
+  year     Int
+  month    Int
+  sequence Int    @default(0)
 
-  @@unique([entity,year,month])
+  @@unique([entity, year, month])
+}
+
+model Branch {
+  id          String        @id @default(uuid())
+  name        String
+  location    String
+  city        String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  user        User[]
+  transaction Transaction[]
+  inventories Inventory[]
+
+  @@map("branches")
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("customers")
+}
+
+model Product {
+  id               String            @id @default(uuid())
+  name             String
+  description      String
+  expirationDate   DateTime
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  costPrice        Float
+  itemTransactions ItemTransaction[]
+  inventories      Inventory[]
+
+  @@map("products")
+}
+
+model Transaction {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  total  Float
+  status TransactionStatus
+
+  branchId         String
+  registeredUserId String
+
+  branch           Branch            @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  registeredUser   User              @relation(fields: [registeredUserId], references: [id], onDelete: Cascade)
+  itemTransactions ItemTransaction[]
+  payments         Payment[]
+  invoices         Invoice[]
+
+  @@map("Transactions")
+}
+
+model ItemTransaction {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productId     String
+  transactionId String
+
+  quantity      Int
+  selling_price Int
+
+  product     Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@map("ItemTransactions")
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  amount        Float
+  paidAt        DateTime             @default(now())
+  paymentMethod PaymentMethodOptions
+  transactionId String
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@map("Payments")
+}
+
+model Inventory {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  quantity  Int
+  productId String
+  branchId  String
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  branch  Branch  @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([branchId, productId])
+}
+
+model Invoice {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transactionId String
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
 }

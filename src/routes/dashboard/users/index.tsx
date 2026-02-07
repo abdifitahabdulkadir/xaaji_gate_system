@@ -1,3 +1,4 @@
+import UserTableRenderer from '@/components/users/UserTableRenderer'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/dashboard/users/')({
@@ -5,5 +6,9 @@ export const Route = createFileRoute('/dashboard/users/')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/dashboard/users/"!</div>
+  return (
+    <div className="w-full h-full space-y-2.5">
+      <UserTableRenderer />
+    </div>
+  )
 }
