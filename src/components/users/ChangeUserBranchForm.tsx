@@ -3,15 +3,16 @@ import {
   ChangeUserBranchSchemaType,
 } from '@/lib/validations'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
-import { useNavigate } from '@tanstack/react-router'
+import { useRouter } from '@tanstack/react-router'
 import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { FieldError } from '../ui/field'
 
-import { registerFn } from '@/data/user.function'
+import { changeUserBranchFn } from '@/data/user.function'
 import { Branch } from '@/generated/prisma/client'
 import { useServerFn } from '@tanstack/react-start'
+import toast from 'react-hot-toast'
 import {
   Select,
   SelectContent,
@@ -27,7 +28,6 @@ interface Props {
 
 export default function ChangeUserBranchForm({ branches, user }: Props) {
   const {
-    register,
     handleSubmit,
     setValue,
     formState: { errors },
@@ -42,11 +42,28 @@ export default function ChangeUserBranchForm({ branches, user }: Props) {
     (eachBranch) => eachBranch.id === user?.branchId,
   )
   const [isSubmitting, startTransition] = useTransition()
-  const useRegisterFn = useServerFn(registerFn)
-  const navigate = useNavigate()
+  const useChangeUserBranchForm = useServerFn(changeUserBranchFn)
+  const router = useRouter()
 
   function handleFormSubmit(data: ChangeUserBranchSchemaType) {
-    startTransition(async () => {})
+    if (!data.branchId) {
+      toast.error('Please select Branch from the list')
+      return
+    }
+    startTransition(async () => {
+      const result = await useChangeUserBranchForm({
+        data: {
+          userId: user?.id,
+          branchId: user?.branchId!,
+        },
+      })
+      if (result.success) {
+        toast.success('Successfully Updated.')
+        await router.invalidate()
+        return
+      }
+      toast.error(result.Errors?.message!)
+    })
   }
 
   return (

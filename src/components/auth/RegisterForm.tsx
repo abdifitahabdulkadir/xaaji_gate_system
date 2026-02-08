@@ -19,7 +19,10 @@ import {
   SelectValue,
 } from '../ui/select'
 
-export default function RegisterForm() {
+interface Props {
+  type: 'create' | 'sign-up'
+}
+export default function RegisterForm({ type }: Props) {
   const {
     register,
     handleSubmit,
@@ -31,6 +34,7 @@ export default function RegisterForm() {
       email: '',
       role: undefined,
       password: '',
+      salary: '',
       gender: undefined,
     },
     resolver: standardSchemaResolver(RegisterSchema),
@@ -43,12 +47,17 @@ export default function RegisterForm() {
   function handleFormSubmit(data: RegisterSchemaType) {
     startTransition(async () => {
       const result = await useRegisterFn({
-        data: data,
+        data: {
+          ...data,
+          type: type,
+        },
       })
       if (result.success) {
         toast.success('Sucessfully Register')
-        navigate({ to: '/' })
-        return
+        if (type === 'sign-up') {
+          return navigate({ to: '/' })
+        }
+        return navigate({ to: '/dashboard/users' })
       }
       toast.error(
         result.Errors?.message ?? 'Failed to Register. please try again',
@@ -107,8 +116,6 @@ export default function RegisterForm() {
               name="password"
               type="text"
               placeholder="Enter Your Password"
-              minLength={6}
-              maxLength={16}
               className="focus-visible:border-primary placeholder:text-lg  h-12.5"
             />
             <FieldError
@@ -173,7 +180,24 @@ export default function RegisterForm() {
               }
             />
           </Select>
-          <div className="sm:col-span-2">
+
+          <label className="flex flex-col gap-1 sm:col-span-2">
+            <span className="text-lg font-medium">User Salary</span>
+            <Input
+              {...register('salary')}
+              disabled={isSubmitting}
+              name="salary"
+              type="text"
+              placeholder="Enter Salary"
+              className="focus-visible:border-primary placeholder:text-lg  h-12.5"
+            />
+            <FieldError
+              errors={
+                errors.salary ? [{ message: errors.salary.message }] : undefined
+              }
+            />
+          </label>
+          <div className="sm:col-span-2 ml-auto">
             <Button
               disabled={isSubmitting}
               type="submit"
@@ -183,17 +207,19 @@ export default function RegisterForm() {
             </Button>
           </div>
         </form>
-        <div className="text-center pt-2">
-          <p className="text-[1.1rem]">
-            Already have an account?{' '}
-            <Link
-              to="/login"
-              className="text-primary font-medium hover:underline"
-            >
-              Log in
-            </Link>
-          </p>
-        </div>
+        {type === 'sign-up' && (
+          <div className="text-center pt-2">
+            <p className="text-[1.1rem]">
+              Already have an account?{' '}
+              <Link
+                to="/login"
+                className="text-primary font-medium hover:underline"
+              >
+                Log in
+              </Link>
+            </p>
+          </div>
+        )}
       </div>
     </section>
   )

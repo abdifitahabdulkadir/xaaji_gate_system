@@ -19,6 +19,7 @@ export const auth = betterAuth({
           const { data } = await generateCustomIdFn({
             data: {
               entity: 'user',
+              prisma,
             },
           })
           return {

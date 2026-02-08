@@ -250,6 +250,7 @@ export type UserWhereInput = {
   accounts?: Prisma.AccountListRelationFilter
   transaction?: Prisma.TransactionListRelationFilter
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+  salaries?: Prisma.SalaryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -270,6 +271,7 @@ export type UserOrderByWithRelationInput = {
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   transaction?: Prisma.TransactionOrderByRelationAggregateInput
   branch?: Prisma.BranchOrderByWithRelationInput
+  salaries?: Prisma.SalaryOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -293,6 +295,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   accounts?: Prisma.AccountListRelationFilter
   transaction?: Prisma.TransactionListRelationFilter
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+  salaries?: Prisma.SalaryListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -350,6 +353,7 @@ export type UserCreateInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   transaction?: Prisma.TransactionCreateNestedManyWithoutRegisteredUserInput
   branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  salaries?: Prisma.SalaryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -369,6 +373,7 @@ export type UserUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   transaction?: Prisma.TransactionUncheckedCreateNestedManyWithoutRegisteredUserInput
+  salaries?: Prisma.SalaryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -388,6 +393,7 @@ export type UserUpdateInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   transaction?: Prisma.TransactionUpdateManyWithoutRegisteredUserNestedInput
   branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  salaries?: Prisma.SalaryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -407,6 +413,7 @@ export type UserUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   transaction?: Prisma.TransactionUncheckedUpdateManyWithoutRegisteredUserNestedInput
+  salaries?: Prisma.SalaryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -631,6 +638,20 @@ export type UserUpdateOneRequiredWithoutTransactionNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTransactionInput, Prisma.UserUpdateWithoutTransactionInput>, Prisma.UserUncheckedUpdateWithoutTransactionInput>
 }
 
+export type UserCreateNestedOneWithoutSalariesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSalariesInput, Prisma.UserUncheckedCreateWithoutSalariesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSalariesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSalariesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSalariesInput, Prisma.UserUncheckedCreateWithoutSalariesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSalariesInput
+  upsert?: Prisma.UserUpsertWithoutSalariesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSalariesInput, Prisma.UserUpdateWithoutSalariesInput>, Prisma.UserUncheckedUpdateWithoutSalariesInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id: string
   name: string
@@ -647,6 +668,7 @@ export type UserCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   transaction?: Prisma.TransactionCreateNestedManyWithoutRegisteredUserInput
   branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  salaries?: Prisma.SalaryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -665,6 +687,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   branchId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   transaction?: Prisma.TransactionUncheckedCreateNestedManyWithoutRegisteredUserInput
+  salaries?: Prisma.SalaryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -699,6 +722,7 @@ export type UserUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   transaction?: Prisma.TransactionUpdateManyWithoutRegisteredUserNestedInput
   branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  salaries?: Prisma.SalaryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -717,6 +741,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   transaction?: Prisma.TransactionUncheckedUpdateManyWithoutRegisteredUserNestedInput
+  salaries?: Prisma.SalaryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -735,6 +760,7 @@ export type UserCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   transaction?: Prisma.TransactionCreateNestedManyWithoutRegisteredUserInput
   branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  salaries?: Prisma.SalaryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -753,6 +779,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   branchId?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   transaction?: Prisma.TransactionUncheckedCreateNestedManyWithoutRegisteredUserInput
+  salaries?: Prisma.SalaryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -787,6 +814,7 @@ export type UserUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   transaction?: Prisma.TransactionUpdateManyWithoutRegisteredUserNestedInput
   branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  salaries?: Prisma.SalaryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -805,6 +833,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   transaction?: Prisma.TransactionUncheckedUpdateManyWithoutRegisteredUserNestedInput
+  salaries?: Prisma.SalaryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBranchInput = {
@@ -823,6 +852,7 @@ export type UserCreateWithoutBranchInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   transaction?: Prisma.TransactionCreateNestedManyWithoutRegisteredUserInput
+  salaries?: Prisma.SalaryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBranchInput = {
@@ -841,6 +871,7 @@ export type UserUncheckedCreateWithoutBranchInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   transaction?: Prisma.TransactionUncheckedCreateNestedManyWithoutRegisteredUserInput
+  salaries?: Prisma.SalaryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBranchInput = {
@@ -904,6 +935,7 @@ export type UserCreateWithoutTransactionInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+  salaries?: Prisma.SalaryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionInput = {
@@ -922,6 +954,7 @@ export type UserUncheckedCreateWithoutTransactionInput = {
   branchId?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  salaries?: Prisma.SalaryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionInput = {
@@ -956,6 +989,7 @@ export type UserUpdateWithoutTransactionInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+  salaries?: Prisma.SalaryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionInput = {
@@ -974,6 +1008,99 @@ export type UserUncheckedUpdateWithoutTransactionInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  salaries?: Prisma.SalaryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSalariesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role: $Enums.UserRoles
+  gender?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  transaction?: Prisma.TransactionCreateNestedManyWithoutRegisteredUserInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSalariesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role: $Enums.UserRoles
+  gender?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  branchId?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  transaction?: Prisma.TransactionUncheckedCreateNestedManyWithoutRegisteredUserInput
+}
+
+export type UserCreateOrConnectWithoutSalariesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSalariesInput, Prisma.UserUncheckedCreateWithoutSalariesInput>
+}
+
+export type UserUpsertWithoutSalariesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSalariesInput, Prisma.UserUncheckedUpdateWithoutSalariesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSalariesInput, Prisma.UserUncheckedCreateWithoutSalariesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSalariesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSalariesInput, Prisma.UserUncheckedUpdateWithoutSalariesInput>
+}
+
+export type UserUpdateWithoutSalariesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  transaction?: Prisma.TransactionUpdateManyWithoutRegisteredUserNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSalariesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  transaction?: Prisma.TransactionUncheckedUpdateManyWithoutRegisteredUserNestedInput
 }
 
 export type UserCreateManyBranchInput = {
@@ -1007,6 +1134,7 @@ export type UserUpdateWithoutBranchInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   transaction?: Prisma.TransactionUpdateManyWithoutRegisteredUserNestedInput
+  salaries?: Prisma.SalaryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBranchInput = {
@@ -1025,6 +1153,7 @@ export type UserUncheckedUpdateWithoutBranchInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   transaction?: Prisma.TransactionUncheckedUpdateManyWithoutRegisteredUserNestedInput
+  salaries?: Prisma.SalaryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutBranchInput = {
@@ -1051,12 +1180,14 @@ export type UserCountOutputType = {
   sessions: number
   accounts: number
   transaction: number
+  salaries: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   transaction?: boolean | UserCountOutputTypeCountTransactionArgs
+  salaries?: boolean | UserCountOutputTypeCountSalariesArgs
 }
 
 /**
@@ -1090,6 +1221,13 @@ export type UserCountOutputTypeCountTransactionArgs<ExtArgs extends runtime.Type
   where?: Prisma.TransactionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSalariesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SalaryWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1109,6 +1247,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   transaction?: boolean | Prisma.User$transactionArgs<ExtArgs>
   branch?: boolean | Prisma.User$branchArgs<ExtArgs>
+  salaries?: boolean | Prisma.User$salariesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1168,6 +1307,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   transaction?: boolean | Prisma.User$transactionArgs<ExtArgs>
   branch?: boolean | Prisma.User$branchArgs<ExtArgs>
+  salaries?: boolean | Prisma.User$salariesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1184,6 +1324,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     transaction: Prisma.$TransactionPayload<ExtArgs>[]
     branch: Prisma.$BranchPayload<ExtArgs> | null
+    salaries: Prisma.$SalaryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1597,6 +1738,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transaction<T extends Prisma.User$transactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transactionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   branch<T extends Prisma.User$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$branchArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  salaries<T extends Prisma.User$salariesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$salariesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2123,6 +2265,30 @@ export type User$branchArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   include?: Prisma.BranchInclude<ExtArgs> | null
   where?: Prisma.BranchWhereInput
+}
+
+/**
+ * User.salaries
+ */
+export type User$salariesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Salary
+   */
+  select?: Prisma.SalarySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Salary
+   */
+  omit?: Prisma.SalaryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SalaryInclude<ExtArgs> | null
+  where?: Prisma.SalaryWhereInput
+  orderBy?: Prisma.SalaryOrderByWithRelationInput | Prisma.SalaryOrderByWithRelationInput[]
+  cursor?: Prisma.SalaryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SalaryScalarFieldEnum | Prisma.SalaryScalarFieldEnum[]
 }
 
 /**

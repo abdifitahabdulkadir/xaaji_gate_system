@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth'
 import { formatDate } from '@/lib/utils'
 import {
   BanUserSchema,
+  ChangeUserBranchSchema,
   EditBasicDataSchema,
   LoginSchema,
   RegisterSchema,
@@ -15,20 +16,37 @@ import {
 } from '@tanstack/react-start'
 import { prisma } from 'prisma/prisma'
 import z from 'zod'
-import { getHeaders } from './utils.functins'
+import { generateCustomIdFn, getHeaders } from './utils.functins'
 
 export const registerFn = createServerFn({ method: 'POST' })
-  .inputValidator(RegisterSchema)
+  .inputValidator(
+    RegisterSchema.extend({
+      type: z.literal(['create', 'sign-up']),
+    }),
+  )
   .handler(async function ({ data }): Promise<ActionResponse> {
     try {
-      const createdUser = await auth.api.signUpEmail({
-        headers: await getHeaders(),
-        body: {
-          email: data.email,
-          name: data.name,
-          password: data.password,
-        },
-      })
+      let createdUser: any = null
+      if (data.type === 'create') {
+        createdUser = await auth.api.createUser({
+          headers: await getHeaders(),
+          body: {
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            role: data.role,
+          },
+        })
+      } else if (data.type === 'sign-up') {
+        createdUser = await auth.api.signUpEmail({
+          headers: await getHeaders(),
+          body: {
+            email: data.email,
+            name: data.name,
+            password: data.password,
+          },
+        })
+      }
       await prisma.user.update({
         where: {
           id: createdUser.user.id,
@@ -36,6 +54,23 @@ export const registerFn = createServerFn({ method: 'POST' })
         data: {
           gender: data.gender,
         },
+      })
+
+      await prisma.$transaction(async (customPrisma) => {
+        const { data: customIdData } = await generateCustomIdFn({
+          data: {
+            entity: 'salary',
+            prisma: customPrisma,
+          },
+        })
+        await prisma.salary.create({
+          data: {
+            id: customIdData?.customId,
+            base: Number.parseFloat(data.salary),
+            userId: createdUser.id,
+            status: 'unPaid',
+          },
+        })
       })
 
       return { success: true }
@@ -278,6 +313,38 @@ export const banUnBanUserFn = createServerFn({ method: 'POST' })
             error instanceof Error
               ? error.message
               : 'Failed to ban or unban user. please try again',
+        },
+      }
+    }
+  })
+
+export const changeUserBranchFn = createServerFn({ method: 'POST' })
+  .inputValidator(
+    ChangeUserBranchSchema.extend({
+      userId: z.string().min(1, 'User ID is required'),
+    }),
+  )
+  .handler(async function ({ data }): Promise<ActionResponse> {
+    try {
+      await prisma.user.update({
+        where: {
+          id: data.userId,
+        },
+        data: {
+          branchId: data.branchId,
+        },
+      })
+
+      return { success: true }
+    } catch (error) {
+      return {
+        success: false,
+        Errors: {
+          statusCode: 400,
+          message:
+            error instanceof Error
+              ? error.message
+              : 'Failed Update the user information. please try again',
         },
       }
     }

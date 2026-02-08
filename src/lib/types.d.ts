@@ -45,3 +45,8 @@ type UserTable = {
   banExpires: Date | null
   branchId: string | null
 }
+
+type CustomPrisma = Omit<
+  PrismaClient<never, undefined, DefaultArgs>,
+  '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'
+>

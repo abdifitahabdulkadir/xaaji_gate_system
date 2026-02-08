@@ -26,7 +26,7 @@ const navLinks: PrimaryNavProps['items'] = linkOptions([
     to: '/dashboard/users',
     title: 'Users',
     label: Users,
-    activeOptions: { exact: true },
+    activeOptions: { exact: false },
   },
 ])
 interface Props {

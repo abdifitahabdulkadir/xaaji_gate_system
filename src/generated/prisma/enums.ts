@@ -31,7 +31,8 @@ export const Entity = {
   invoice: 'invoice',
   transaction: 'transaction',
   payment: 'payment',
-  customer: 'customer'
+  customer: 'customer',
+  salary: 'salary'
 } as const
 
 export type Entity = (typeof Entity)[keyof typeof Entity]

@@ -82,3 +82,13 @@ export type Inventory = Prisma.InventoryModel
  * 
  */
 export type Invoice = Prisma.InvoiceModel
+/**
+ * Model Salary
+ * 
+ */
+export type Salary = Prisma.SalaryModel
+/**
+ * Model SalaryPayment
+ * 
+ */
+export type SalaryPayment = Prisma.SalaryPaymentModel

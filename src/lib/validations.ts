@@ -2,12 +2,16 @@ import { Gender, UserRoles } from '@/generated/prisma/enums'
 import z from 'zod'
 
 export const RegisterSchema = z.object({
+  salary: z
+    .string()
+    .regex(/^\d+$/, 'Please provide value only numbers not characters'),
   name: z
     .string()
     .min(1, 'User Name is required')
     .max(60, 'User name must be less than 60 characters')
     .regex(/^[0-9A-Za-z ]+$/, 'User name must not contain symbols'),
   email: z.email(),
+
   password: z
     .string()
     .min(1, 'Password  is required')
@@ -51,6 +55,8 @@ export const BanUserSchema = z.object({
 export const ChangeUserBranchSchema = z.object({
   branchId: z.string().min(1, 'Branch Is required'),
 })
+
+export const CreateUserSchema = RegisterSchema.extend({})
 
 // export types for easier use in the fronend.
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>

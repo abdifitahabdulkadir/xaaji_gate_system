@@ -1,7 +1,6 @@
 import { Entity } from '@/generated/prisma/enums'
 import { createServerFn } from '@tanstack/react-start'
 import { getRequestHeaders } from '@tanstack/react-start/server'
-import { prisma } from 'prisma/prisma'
 import z from 'zod'
 export async function getHeaders() {
   return await getRequestHeaders()
@@ -11,6 +10,7 @@ export const generateCustomIdFn = createServerFn()
   .inputValidator(
     z.object({
       entity: z.enum(Entity),
+      prisma: z.any(),
     }),
   )
   .handler(async function ({ data }): Promise<
@@ -34,9 +34,13 @@ export const generateCustomIdFn = createServerFn()
         prefix = 'TRA'
       } else if (entity === 'user') {
         prefix = 'USR'
+      } else if (entity === 'salary') {
+        prefix = 'SAL'
+      } else if (entity === 'customer') {
+        prefix = 'CUS'
       }
 
-      const createdRecord = await prisma.customIdCounter.upsert({
+      const createdRecord = await data.prisma.customIdCounter.upsert({
         where: {
           entity_year_month: {
             year,

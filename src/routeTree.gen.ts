@@ -16,6 +16,7 @@ import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as DashboardUsersIndexRouteImport } from './routes/dashboard/users/index'
 import { Route as DashboardBranchIdIndexRouteImport } from './routes/dashboard/$branchId/index'
+import { Route as DashboardUsersCreateRouteImport } from './routes/dashboard/users/create'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as DashboardUsersUserIdEditRouteImport } from './routes/dashboard/users/$userId.edit'
 
@@ -54,6 +55,11 @@ const DashboardBranchIdIndexRoute = DashboardBranchIdIndexRouteImport.update({
   path: '/$branchId/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardUsersCreateRoute = DashboardUsersCreateRouteImport.update({
+  id: '/users/create',
+  path: '/users/create',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof AuthRegisterRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/users/create': typeof DashboardUsersCreateRoute
   '/dashboard/$branchId/': typeof DashboardBranchIdIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
   '/dashboard/users/$userId/edit': typeof DashboardUsersUserIdEditRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/register': typeof AuthRegisterRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/users/create': typeof DashboardUsersCreateRoute
   '/dashboard/$branchId': typeof DashboardBranchIdIndexRoute
   '/dashboard/users': typeof DashboardUsersIndexRoute
   '/dashboard/users/$userId/edit': typeof DashboardUsersUserIdEditRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/_auth/register': typeof AuthRegisterRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/users/create': typeof DashboardUsersCreateRoute
   '/dashboard/$branchId/': typeof DashboardBranchIdIndexRoute
   '/dashboard/users/': typeof DashboardUsersIndexRoute
   '/dashboard/users/$userId/edit': typeof DashboardUsersUserIdEditRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/dashboard/users/create'
     | '/dashboard/$branchId/'
     | '/dashboard/users/'
     | '/dashboard/users/$userId/edit'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/dashboard'
     | '/api/auth/$'
+    | '/dashboard/users/create'
     | '/dashboard/$branchId'
     | '/dashboard/users'
     | '/dashboard/users/$userId/edit'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/_auth/register'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/dashboard/users/create'
     | '/dashboard/$branchId/'
     | '/dashboard/users/'
     | '/dashboard/users/$userId/edit'
@@ -193,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardBranchIdIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/users/create': {
+      id: '/dashboard/users/create'
+      path: '/users/create'
+      fullPath: '/dashboard/users/create'
+      preLoaderRoute: typeof DashboardUsersCreateRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -212,6 +231,7 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardUsersCreateRoute: typeof DashboardUsersCreateRoute
   DashboardBranchIdIndexRoute: typeof DashboardBranchIdIndexRoute
   DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
   DashboardUsersUserIdEditRoute: typeof DashboardUsersUserIdEditRoute
@@ -219,6 +239,7 @@ interface DashboardRouteRouteChildren {
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardUsersCreateRoute: DashboardUsersCreateRoute,
   DashboardBranchIdIndexRoute: DashboardBranchIdIndexRoute,
   DashboardUsersIndexRoute: DashboardUsersIndexRoute,
   DashboardUsersUserIdEditRoute: DashboardUsersUserIdEditRoute,

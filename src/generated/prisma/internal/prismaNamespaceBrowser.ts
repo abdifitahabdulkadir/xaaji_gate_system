@@ -63,7 +63,9 @@ export const ModelName = {
   ItemTransaction: 'ItemTransaction',
   Payment: 'Payment',
   Inventory: 'Inventory',
-  Invoice: 'Invoice'
+  Invoice: 'Invoice',
+  Salary: 'Salary',
+  SalaryPayment: 'SalaryPayment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -254,6 +256,29 @@ export const InvoiceScalarFieldEnum = {
 } as const
 
 export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
+
+
+export const SalaryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  base: 'base',
+  userId: 'userId',
+  status: 'status'
+} as const
+
+export type SalaryScalarFieldEnum = (typeof SalaryScalarFieldEnum)[keyof typeof SalaryScalarFieldEnum]
+
+
+export const SalaryPaymentScalarFieldEnum = {
+  id: 'id',
+  paidAt: 'paidAt',
+  amount: 'amount',
+  description: 'description',
+  salaryId: 'salaryId'
+} as const
+
+export type SalaryPaymentScalarFieldEnum = (typeof SalaryPaymentScalarFieldEnum)[keyof typeof SalaryPaymentScalarFieldEnum]
 
 
 export const SortOrder = {

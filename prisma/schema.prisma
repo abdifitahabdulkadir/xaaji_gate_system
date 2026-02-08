@@ -15,6 +15,7 @@ enum Entity {
   transaction
   payment
   customer
+  salary
 }
 
 enum TransactionStatus {
@@ -59,7 +60,8 @@ model User {
   banExpires DateTime?
 
   branchId String?
-  branch   Branch? @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  branch   Branch?  @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  salaries Salary[]
 
   @@unique([email])
   @@map("user")
@@ -241,4 +243,27 @@ model Invoice {
   transactionId String
 
   transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+}
+
+model Salary {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  base      Float
+  userId String
+  status TransactionStatus
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  salaryPayments SalaryPayment[]
+
+  @@map("Salaries")
+}
+
+model SalaryPayment {
+  id          String   @id @default(uuid())
+  paidAt      DateTime @default(now())
+  amount      Float
+  description String?
+
+  salaryId String
+  salary   Salary @relation(fields: [salaryId], references: [id], onDelete: Cascade)
 }
