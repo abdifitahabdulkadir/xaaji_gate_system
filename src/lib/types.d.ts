@@ -1,3 +1,5 @@
+import { Salary, SalaryPayment } from '@/generated/prisma/client'
+
 type ActionResponse<T = null> = {
   data?: T
   success: boolean
@@ -44,6 +46,11 @@ type UserTable = {
   banReason: string | null
   banExpires: Date | null
   branchId: string | null
+}
+
+type SalaryDetials = {
+  salary: Salary
+  details: SalaryPayment[]
 }
 
 type CustomPrisma = Omit<

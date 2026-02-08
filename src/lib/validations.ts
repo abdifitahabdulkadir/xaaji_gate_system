@@ -58,9 +58,16 @@ export const ChangeUserBranchSchema = z.object({
 
 export const CreateUserSchema = RegisterSchema.extend({})
 
+export const PaySalarySchema = z.object({
+  salaryId: z.string().min(1, 'Salary ID is required'),
+  amount: z.coerce.number().positive('Amount must be greater than 0'),
+  description: z.string().max(200).optional(),
+})
+
 // export types for easier use in the fronend.
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>
 export type LoginSchemaType = z.infer<typeof LoginSchema>
 export type EditBasicDataSchemaType = z.infer<typeof EditBasicDataSchema>
 export type BanUserSchemaType = z.infer<typeof BanUserSchema>
 export type ChangeUserBranchSchemaType = z.infer<typeof ChangeUserBranchSchema>
+export type PaySalarySchemaType = z.infer<typeof PaySalarySchema>

@@ -1,7 +1,9 @@
 import BackButton from '@/components/shared/BackButton'
 import BanUserForm from '@/components/users/BanUserForm'
 import ChangeUserBranchForm from '@/components/users/ChangeUserBranchForm'
+import DeleteUserForm from '@/components/users/DeleteUser'
 import EditBasicDataForm from '@/components/users/EditBasicDataForm'
+import SalaryDetails from '@/components/users/SalaryDetails'
 import { getUserByIdFn } from '@/data/user.function'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -28,6 +30,8 @@ function RouteComponent() {
           branches={data?.branches ?? []}
           user={data?.user}
         />
+        <SalaryDetails user={data?.user} />
+        <DeleteUserForm userId={data?.user.id} />
       </div>
     </div>
   )

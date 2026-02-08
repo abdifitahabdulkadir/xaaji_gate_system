@@ -1,17 +1,15 @@
 import { Entity } from '@/generated/prisma/enums'
+import { ActionResponse, CustomPrisma } from '@/lib/types'
 import { createServerFn } from '@tanstack/react-start'
 import { getRequestHeaders } from '@tanstack/react-start/server'
-import z from 'zod'
+import { prisma } from 'prisma/prisma'
 export async function getHeaders() {
   return await getRequestHeaders()
 }
 
 export const generateCustomIdFn = createServerFn()
   .inputValidator(
-    z.object({
-      entity: z.enum(Entity),
-      prisma: z.any(),
-    }),
+    (data: { entity: Entity; prisma: CustomPrisma | undefined }) => data,
   )
   .handler(async function ({ data }): Promise<
     ActionResponse<{
@@ -39,8 +37,9 @@ export const generateCustomIdFn = createServerFn()
       } else if (entity === 'customer') {
         prefix = 'CUS'
       }
+      const currentPrisma = data.prisma ? data.prisma : prisma
 
-      const createdRecord = await data.prisma.customIdCounter.upsert({
+      const createdRecord = currentPrisma.customIdCounter.upsert({
         where: {
           entity_year_month: {
             year,

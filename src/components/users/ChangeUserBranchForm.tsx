@@ -11,6 +11,7 @@ import { FieldError } from '../ui/field'
 
 import { changeUserBranchFn } from '@/data/user.function'
 import { Branch } from '@/generated/prisma/client'
+import { UserTable } from '@/lib/types'
 import { useServerFn } from '@tanstack/react-start'
 import toast from 'react-hot-toast'
 import {

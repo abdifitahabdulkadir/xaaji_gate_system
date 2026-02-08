@@ -250,7 +250,7 @@ model Salary {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   base      Float
-  userId String
+  userId String 
   status TransactionStatus
   user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   salaryPayments SalaryPayment[]

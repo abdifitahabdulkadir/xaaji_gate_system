@@ -1,11 +1,13 @@
-import { Branch } from '@/generated/prisma/client'
+import { Branch, SalaryPayment } from '@/generated/prisma/client'
 import { auth } from '@/lib/auth'
+import { ActionResponse, SalaryDetials, UserTable } from '@/lib/types'
 import { formatDate } from '@/lib/utils'
 import {
   BanUserSchema,
   ChangeUserBranchSchema,
   EditBasicDataSchema,
   LoginSchema,
+  PaySalarySchema,
   RegisterSchema,
 } from '@/lib/validations'
 import { redirect } from '@tanstack/react-router'
@@ -56,23 +58,27 @@ export const registerFn = createServerFn({ method: 'POST' })
         },
       })
 
-      await prisma.$transaction(async (customPrisma) => {
-        const { data: customIdData } = await generateCustomIdFn({
+      const userId = createdUser.user.id
+      await prisma.$transaction(async (tnx) => {
+        const result = await generateCustomIdFn({
           data: {
             entity: 'salary',
-            prisma: customPrisma,
+            prisma: undefined,
           },
         })
-        await prisma.salary.create({
+        const customId = result.data?.customId
+        if (!customId) {
+          throw new Error('Failed to generate salary ID')
+        }
+        await tnx.salary.create({
           data: {
-            id: customIdData?.customId,
+            id: customId,
+            userId,
             base: Number.parseFloat(data.salary),
-            userId: createdUser.id,
             status: 'unPaid',
           },
         })
       })
-
       return { success: true }
     } catch (error) {
       console.log(error)
@@ -345,6 +351,119 @@ export const changeUserBranchFn = createServerFn({ method: 'POST' })
             error instanceof Error
               ? error.message
               : 'Failed Update the user information. please try again',
+        },
+      }
+    }
+  })
+
+export const getUserSalaryDetailsById = createServerFn()
+  .inputValidator(
+    z.object({
+      userId: z.string().min(1, 'User ID is required'),
+    }),
+  )
+  .handler(async function ({ data }): Promise<ActionResponse<SalaryDetials[]>> {
+    try {
+      const salary = await prisma.salary.findMany({
+        where: {
+          userId: data.userId,
+        },
+        include: {
+          salaryPayments: {},
+        },
+      })
+
+      return {
+        success: true,
+        data: salary.map((s) => ({
+          salary: {
+            id: s.id,
+            createdAt: s.createdAt,
+            updatedAt: s.updatedAt,
+            userId: s.userId,
+            base: s.base,
+            status: s.status,
+          },
+          details: s.salaryPayments,
+        })),
+      }
+    } catch (error) {
+      return {
+        success: false,
+        Errors: {
+          statusCode: 400,
+          message:
+            error instanceof Error ? error.message : 'Failed to save Changes',
+        },
+      }
+    }
+  })
+
+export const paySalaryFn = createServerFn({ method: 'POST' })
+  .inputValidator(PaySalarySchema)
+  .handler(async function ({ data }): Promise<ActionResponse<SalaryPayment>> {
+    try {
+      const salary = await prisma.salary.findUnique({
+        where: { id: data.salaryId },
+        include: { salaryPayments: true },
+      })
+      if (!salary) throw new Error('Salary not found')
+      const totalPaid = salary.salaryPayments.reduce(
+        (sum, p) => sum + p.amount,
+        0,
+      )
+      const remaining = salary.base - totalPaid
+      if (data.amount > remaining) {
+        return {
+          success: false,
+          Errors: {
+            statusCode: 400,
+            message: `Amount cannot exceed remaining balance (${remaining.toFixed(2)})`,
+          },
+        }
+      }
+      const payment = await prisma.salaryPayment.create({
+        data: {
+          salaryId: data.salaryId,
+          amount: data.amount,
+          description: data.description ?? undefined,
+        },
+      })
+      return { success: true, data: payment }
+    } catch (error) {
+      return {
+        success: false,
+        Errors: {
+          statusCode: 400,
+          message:
+            error instanceof Error ? error.message : 'Failed to record payment',
+        },
+      }
+    }
+  })
+
+export const deleteUserByIdFn = createServerFn({ method: 'POST' })
+  .inputValidator(
+    z.object({
+      userId: z.string().min(1, 'User Id is required'),
+    }),
+  )
+  .handler(async function ({ data }): Promise<ActionResponse> {
+    try {
+      await prisma.user.delete({
+        where: {
+          id: data.userId,
+        },
+      })
+
+      return { success: true }
+    } catch (error) {
+      return {
+        success: false,
+        Errors: {
+          statusCode: 400,
+          message:
+            error instanceof Error ? error.message : 'Failed to Delete User',
         },
       }
     }
