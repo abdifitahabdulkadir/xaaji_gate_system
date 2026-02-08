@@ -1,7 +1,8 @@
 import BackButton from '@/components/shared/BackButton'
 import BanUserForm from '@/components/users/BanUserForm'
+import ChangeUserBranchForm from '@/components/users/ChangeUserBranchForm'
 import EditBasicDataForm from '@/components/users/EditBasicDataForm'
-import { getUserByIdFn } from '@/data/user.functions'
+import { getUserByIdFn } from '@/data/user.function'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/dashboard/users/$userId/edit')({
@@ -16,13 +17,17 @@ export const Route = createFileRoute('/dashboard/users/$userId/edit')({
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
+  const { data } = Route.useLoaderData()
   return (
     <div className="w-full h-full space-y-3.5">
       <BackButton to="/dashboard/users" />
       <div className="h-full w-full space-y-[100px]">
-        <EditBasicDataForm user={data.data} />
-        <BanUserForm user={data.data} />
+        <EditBasicDataForm user={data?.user} />
+        <BanUserForm user={data?.user} />
+        <ChangeUserBranchForm
+          branches={data?.branches ?? []}
+          user={data?.user}
+        />
       </div>
     </div>
   )

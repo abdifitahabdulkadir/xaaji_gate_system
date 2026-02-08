@@ -48,8 +48,13 @@ export const BanUserSchema = z.object({
   ]),
 })
 
+export const ChangeUserBranchSchema = z.object({
+  branchId: z.string().min(1, 'Branch Is required'),
+})
+
 // export types for easier use in the fronend.
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>
 export type LoginSchemaType = z.infer<typeof LoginSchema>
 export type EditBasicDataSchemaType = z.infer<typeof EditBasicDataSchema>
 export type BanUserSchemaType = z.infer<typeof BanUserSchema>
+export type ChangeUserBranchSchemaType = z.infer<typeof ChangeUserBranchSchema>

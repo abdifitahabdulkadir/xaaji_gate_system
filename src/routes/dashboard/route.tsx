@@ -1,7 +1,7 @@
 import Header from '@/components/Header'
 import { AppSidebar } from '@/components/sidebar/app-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
-import { getUserSessionFn } from '@/data/user.functions'
+import { getUserSessionFn } from '@/data/user.function'
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Outlet } from '@tanstack/react-router'

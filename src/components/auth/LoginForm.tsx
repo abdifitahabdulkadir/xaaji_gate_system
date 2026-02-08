@@ -1,4 +1,4 @@
-import { loginFn } from '@/data/user.functions'
+import { loginFn } from '@/data/user.function'
 import { LoginSchema, LoginSchemaType } from '@/lib/validations'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { Link, useNavigate } from '@tanstack/react-router'

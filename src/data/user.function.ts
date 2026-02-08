@@ -1,3 +1,4 @@
+import { Branch } from '@/generated/prisma/client'
 import { auth } from '@/lib/auth'
 import { formatDate } from '@/lib/utils'
 import {
@@ -7,7 +8,11 @@ import {
   RegisterSchema,
 } from '@/lib/validations'
 import { redirect } from '@tanstack/react-router'
-import { createMiddleware, createServerFn } from '@tanstack/react-start'
+import {
+  createMiddleware,
+  createServerFn,
+  type AnyRequestMiddleware,
+} from '@tanstack/react-start'
 import { prisma } from 'prisma/prisma'
 import z from 'zod'
 import { getHeaders } from './utils.functins'
@@ -90,22 +95,16 @@ export const getUserSessionFn = createServerFn().handler(async () => {
   }
 })
 
-export const globalAuthMiddleware = createMiddleware({
+export const globalAuthMiddleware: AnyRequestMiddleware = createMiddleware({
   type: 'request',
-}).server(async ({ next }) => {
-  const session = await auth.api.getSession({
+}).server(async function ({ next }) {
+  const data = await auth.api.getSession({
     headers: await getHeaders(),
   })
-
-  if (!session) {
-    return redirect({ to: '/login' })
+  if (!data) {
+    throw redirect({ to: '/login' })
   }
-  return next({
-    context: {
-      session: session.session,
-      user: session.user,
-    },
-  })
+  return next({ context: data })
 })
 
 export const getAllUsers = createServerFn().handler(async function (): Promise<
@@ -120,6 +119,7 @@ export const getAllUsers = createServerFn().handler(async function (): Promise<
       return {
         id: eachUser.id,
         name: eachUser.name,
+        branchId: eachUser.branchId,
         email: eachUser.email,
         gender: eachUser.gender,
         role: eachUser.role,
@@ -150,16 +150,26 @@ export const getUserByIdFn = createServerFn()
       userId: z.string().min(1, 'User ID is required'),
     }),
   )
-  .handler(async function ({ data }): Promise<ActionResponse<UserTable>> {
+  .handler(async function ({ data }): Promise<
+    ActionResponse<{
+      user: UserTable
+      branches: Branch[]
+    }>
+  > {
     try {
-      const foundUser = await prisma.user.findUnique({
-        where: {
-          id: data.userId,
-        },
-      })
+      const [branches, foundUser] = await prisma.$transaction([
+        prisma.branch.findMany(),
+        prisma.user.findUnique({
+          where: {
+            id: data.userId,
+          },
+        }),
+      ])
+
       if (!foundUser) return { success: true }
       const transformed: UserTable = {
         id: foundUser.id,
+        branchId: foundUser.branchId,
         name: foundUser.name,
         email: foundUser.email,
         gender: foundUser.gender,
@@ -170,7 +180,13 @@ export const getUserByIdFn = createServerFn()
         banReason: foundUser.banReason ?? 'Not banned ',
       }
 
-      return { success: true, data: transformed }
+      return {
+        success: true,
+        data: {
+          user: transformed,
+          branches: branches,
+        },
+      }
     } catch (error) {
       return {
         success: true,

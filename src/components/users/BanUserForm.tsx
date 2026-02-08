@@ -7,7 +7,7 @@ import { Button } from '../ui/button'
 import { FieldError } from '../ui/field'
 import { Input } from '../ui/input'
 
-import { banUnBanUserFn } from '@/data/user.functions'
+import { banUnBanUserFn } from '@/data/user.function'
 import { useQueryClient } from '@tanstack/react-query'
 import { useServerFn } from '@tanstack/react-start'
 import toast from 'react-hot-toast'

@@ -43,4 +43,5 @@ type UserTable = {
   banned: boolean | null
   banReason: string | null
   banExpires: Date | null
+  branchId: string | null
 }

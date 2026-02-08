@@ -1,4 +1,4 @@
-import { getAllUsers } from '@/data/user.functions'
+import { getAllUsers } from '@/data/user.function'
 import { useQuery } from '@tanstack/react-query'
 import { userColumns } from '../columns'
 import { TableSkelton } from '../shared/loaders'

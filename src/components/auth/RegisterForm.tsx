@@ -8,7 +8,7 @@ import { Button } from '../ui/button'
 import { FieldError } from '../ui/field'
 import { Input } from '../ui/input'
 
-import { registerFn } from '@/data/user.functions'
+import { registerFn } from '@/data/user.function'
 import { useServerFn } from '@tanstack/react-start'
 import toast from 'react-hot-toast'
 import {
